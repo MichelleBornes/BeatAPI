@@ -1,16 +1,34 @@
 
+const domParser = new DOMParser();
+
+const input = document.querySelector('#component input');
+const listElement = document.querySelector('#list');
+const addSongButton = document.querySelector('#page .add-button')
+const dialogElement = document.querySelector('#page dialog');
+
 async function onInputChange(event) {
-    await refreshList(event.target.value);
+    await refreshListComponent(event.target.value);
 }
 
-function onAddButtonClick() {
-    alert('Clicou')
+async function onAddSongButtonClick() {
+
+    while (dialogElement.firstChild) {
+        dialogElement.firstChild.remove();
+    }
+
+    const component = await fetch('pages/music-list/components/music-modal.html')
+        .then(response => response.text())
+        .then(rawHtml => domParser.parseFromString(rawHtml, 'text/html'))
+        .then(html => html.body);
+
+    for (let e of component.childNodes){
+        dialogElement.appendChild(e);
+    }
+
+    dialogElement.showModal()
 }
 
-async function refreshList(input) {
-
-    const domParser = new DOMParser();
-    const listElement = document.querySelector('#list');
+async function refreshListComponent(input) {
 
     const songs = (await getData(input))
         .filter(x => x.title.toLowerCase().includes(input.toLowerCase()));
@@ -78,14 +96,13 @@ async function getData(input) {
 }
 
 async function main() {
-    const input = document.querySelector('#component input');
-    const addSongButton = document.querySelector('#page .add-button')
-
     input.addEventListener('input', onInputChange);
-    await refreshList('');
 
-    addSongButton.addEventListener('click', onAddButtonClick)
+    addSongButton.addEventListener('click', onAddSongButtonClick);
+
+    dialogElement.addEventListener('light dismiss', () => alert('aaaa'))
+
+    await refreshListComponent('');
 }
 
 main();
-// document.addEventListener('DOMContentLoaded', main)

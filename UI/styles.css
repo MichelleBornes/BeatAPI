@@ -33,3 +33,17 @@ input::placeholder {
   color: var(--secondary);
   font-size: var(--input-font-size);
 }
+
+dialog {
+  padding: 1rem;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 1px 1px 10px 0px #333a;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+dialog::backdrop {
+  background-color: #9997;
+}

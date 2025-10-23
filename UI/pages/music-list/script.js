@@ -1,0 +1,91 @@
+
+async function onInputChange(event) {
+    await refreshList(event.target.value);
+}
+
+function onAddButtonClick() {
+    alert('Clicou')
+}
+
+async function refreshList(input) {
+
+    const domParser = new DOMParser();
+    const listElement = document.querySelector('#list');
+
+    const songs = (await getData(input))
+        .filter(x => x.title.toLowerCase().includes(input.toLowerCase()));
+
+    const component = await fetch('pages/music-list/components/music-item.html')
+        .then(response => response.text())
+        .then(rawHtml => domParser.parseFromString(rawHtml, 'text/html'))
+        .then(html => html.body.firstChild);
+
+    while (listElement.firstChild) {
+        listElement.firstChild.remove();
+    }
+
+    for (let song of songs) {
+        const clone = component.cloneNode(true);
+
+        const imageElement = clone.querySelector('img');
+        const titleSpan = clone.querySelector('.title');
+        const authorSpan = clone.querySelector('.author');
+        const albumSpan = clone.querySelector('.album');
+        const categorySpan = clone.querySelector('.category');
+        const durationSpan = clone.querySelector('.duration');
+
+        imageElement.src = song.cover;
+        titleSpan.innerText = song.title;
+        authorSpan.innerText = song.author;
+        albumSpan.innerText = song.album;
+        categorySpan.innerText = song.category;
+        durationSpan.innerText = song.duration;
+
+        listElement.appendChild(clone);
+    }
+}
+
+async function getData(input) {
+    return [
+        {
+            id: 1,
+            title: "Stereo Love",
+            author: "N/A",
+            album: "Album 1",
+            cover: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iomoio.com%2Fcovers%2F150%2F22%2F265322.jpg&f=1&nofb=1&ipt=f4ae276943de89b8064f93c2e02d357d4f034cb8dc56c37f678fec7780186385",
+            category: 'Rock',
+            duration: '04:25'
+        },
+        {
+            id: 2,
+            title: "Bad Romance",
+            author: "Lady Gaga",
+            album: "Album 2",
+            cover: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ff4.bcbits.com%2Fimg%2Fa0273398113_10.jpg&f=1&nofb=1&ipt=be1922e642c92b88e7e27aeea8b7d30683799d9cb722701c70cf57c736685194",
+            category: 'Pop',
+            duration: '03:27'
+        },
+        {
+            id: 3,
+            title: "Musica",
+            author: "Lady Gaga",
+            album: "Album 2",
+            cover: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fstatic1.squarespace.com%2Fstatic%2F56454c01e4b0177ad4141742%2F56f3eeaa6e06f2df013dd6cd%2F56f3ef166e06f2df013de90c%2F1458827030375%2FCovers-Vol.-1-Cover.jpg%3Fformat%3Doriginal&f=1&nofb=1&ipt=5689428726ee7f772f3153d6297f8bb1aa034d7a394a36076941bb5b23ea799b",
+            category: 'Pop',
+            duration: '03:27'
+        }
+    ]
+}
+
+async function main() {
+    const input = document.querySelector('#component input');
+    const addSongButton = document.querySelector('#page .add-button')
+
+    input.addEventListener('input', onInputChange);
+    await refreshList('');
+
+    addSongButton.addEventListener('click', onAddButtonClick)
+}
+
+main();
+// document.addEventListener('DOMContentLoaded', main)

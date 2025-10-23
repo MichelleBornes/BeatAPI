@@ -1,0 +1,97 @@
+#page {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+}
+
+#component {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  height: 70%;
+  width: min(500px, 50%);
+}
+
+#list {
+  box-shadow: 1px 1px 5px 1px #333a;
+  height: 80%;
+  border-radius: 15px;
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  overflow-y: scroll;
+}
+
+.music-item {
+  display: flex;
+  gap: 1em;
+  box-shadow: 0px 0px 3px 1px #3335;
+  border-radius: 10px;
+  padding: 0.75em;
+}
+
+.music-item img {
+  width: 5em;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+}
+
+.metadata {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.category {
+  position: absolute;
+  background-color: rgba(255, 0, 0, 0.5);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 5px;
+  padding: 0.2em 0.6em;
+  top: 0;
+  right: 0;
+}
+
+.duration {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  color: #555;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.add-button {
+  --offset: 2rem;
+  --diameter: 5rem;
+  position: fixed;
+  background-color: #06f;
+  width: var(--diameter);
+  height: var(--diameter);
+  border-radius: 50%;
+  bottom: var(--offset);
+  right: var(--offset);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.add-button > .plus {
+  position: absolute;
+  background-color: #fff;
+  width: 0.25rem;
+  height: calc(var(--diameter) * 0.5);
+}
+
+.add-button > .plus:nth-child(1) {
+  rotate: 90deg;
+}

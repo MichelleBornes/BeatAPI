@@ -1,5 +1,35 @@
+:root {
+  --primary: #333;
+  --secondary: #777;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-grow: 1;
+}
+
+body {
+  width: 100%;
+}
+
+input {
+  --input-font-size: 1.3rem;
+  padding: 0.5em 1em;
+  border-radius: 0.75em;
+  border: none;
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.8);
+  font-size: var(--input-font-size);
+}
+
+input::placeholder {
+  color: var(--secondary);
+  font-size: var(--input-font-size);
 }

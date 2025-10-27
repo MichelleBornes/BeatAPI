@@ -57,7 +57,7 @@ async function refreshListComponent(input) {
         authorSpan.innerText = song.author;
         albumSpan.innerText = song.album;
         categorySpan.innerText = song.category;
-        durationSpan.innerText = song.duration;
+        durationSpan.innerText = secondsToDuration(song.duration);
 
         listElement.appendChild(clone);
     }
@@ -72,7 +72,7 @@ async function getData(input) {
             album: "Album 1",
             cover: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.iomoio.com%2Fcovers%2F150%2F22%2F265322.jpg&f=1&nofb=1&ipt=f4ae276943de89b8064f93c2e02d357d4f034cb8dc56c37f678fec7780186385",
             category: 'Rock',
-            duration: '04:25'
+            duration: 265
         },
         {
             id: 2,
@@ -81,7 +81,7 @@ async function getData(input) {
             album: "Album 2",
             cover: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ff4.bcbits.com%2Fimg%2Fa0273398113_10.jpg&f=1&nofb=1&ipt=be1922e642c92b88e7e27aeea8b7d30683799d9cb722701c70cf57c736685194",
             category: 'Pop',
-            duration: '03:27'
+            duration: 207
         },
         {
             id: 3,
@@ -90,9 +90,22 @@ async function getData(input) {
             album: "Album 2",
             cover: "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fstatic1.squarespace.com%2Fstatic%2F56454c01e4b0177ad4141742%2F56f3eeaa6e06f2df013dd6cd%2F56f3ef166e06f2df013de90c%2F1458827030375%2FCovers-Vol.-1-Cover.jpg%3Fformat%3Doriginal&f=1&nofb=1&ipt=5689428726ee7f772f3153d6297f8bb1aa034d7a394a36076941bb5b23ea799b",
             category: 'Pop',
-            duration: '03:27'
+            duration: 207
         }
     ]
+}
+
+function secondsToDuration(totalSeconds) {
+    const minutes = (totalSeconds / 60)
+        .toFixed(0)
+        .toString()
+        .padStart(2, '0');
+
+    const seconds = (totalSeconds % 60)
+        .toString()
+        .padStart(2, '0');
+
+    return `${minutes}:${seconds}`;
 }
 
 async function main() {

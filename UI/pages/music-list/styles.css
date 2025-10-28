@@ -9,7 +9,7 @@
   flex-direction: column;
   gap: 1em;
   height: 70%;
-  width: min(500px, 50%);
+  width: min(600px, 60%);
 }
 
 #list {
@@ -45,13 +45,17 @@
   justify-content: space-between;
 }
 
+.metadata > .header {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .title {
   font-size: 1.5rem;
   font-weight: 600;
 }
 
 .category {
-  position: absolute;
   background-color: rgba(255, 0, 0, 0.5);
   color: #fff;
   font-weight: 600;
@@ -68,6 +72,27 @@
   color: #555;
   font-size: 1.1em;
   font-weight: 500;
+}
+
+.song-buttons {
+  position: absolute;
+  right: 0;
+  top: 0;
+  display: flex;
+  gap: 0.75em;
+}
+
+.song-buttons > svg {
+  width: 1.5rem;
+  cursor: pointer;
+}
+
+.edit-icon {
+  fill: #24f;
+}
+
+.delete-icon {
+  fill: #f24;
 }
 
 .add-button {

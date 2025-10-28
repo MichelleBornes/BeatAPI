@@ -1,9 +1,9 @@
 
 const domParser = new DOMParser();
 
-const input = document.querySelector('#component input');
+const inputElement = document.querySelector('#component input');
 const listElement = document.querySelector('#list');
-const addSongButton = document.querySelector('#page .add-button')
+const addSongButton = document.querySelector('#page .add-button');
 const dialogElement = document.querySelector('#page dialog');
 
 async function onInputChange(event) {
@@ -25,7 +25,19 @@ async function onAddSongButtonClick() {
         dialogElement.appendChild(e);
     }
 
-    dialogElement.showModal()
+    dialogElement.showModal();
+}
+
+async function onEditButtonClick(id) {
+    alert(`UPDATE ${id}`);
+
+    await refreshListComponent(inputElement.value);
+}
+
+async function onDeleteButtonClick(id) {
+    alert(`DELETE ${id}`);
+
+    await refreshListComponent(inputElement.value);
 }
 
 async function refreshListComponent(input) {
@@ -52,12 +64,18 @@ async function refreshListComponent(input) {
         const categorySpan = clone.querySelector('.category');
         const durationSpan = clone.querySelector('.duration');
 
+        const editButtonElement = clone.querySelector('.edit-icon');
+        const deleteButtonElement = clone.querySelector('.delete-icon');
+
         imageElement.src = song.cover;
         titleSpan.innerText = song.title;
         authorSpan.innerText = song.author;
         albumSpan.innerText = song.album;
         categorySpan.innerText = song.category;
         durationSpan.innerText = secondsToDuration(song.duration);
+
+        editButtonElement.addEventListener('click', () => onEditButtonClick(song.id));
+        deleteButtonElement.addEventListener('click', () => onDeleteButtonClick(song.id));
 
         listElement.appendChild(clone);
     }
@@ -109,11 +127,9 @@ function secondsToDuration(totalSeconds) {
 }
 
 async function main() {
-    input.addEventListener('input', onInputChange);
+    inputElement.addEventListener('input', onInputChange);
 
     addSongButton.addEventListener('click', onAddSongButtonClick);
-
-    dialogElement.addEventListener('light dismiss', () => alert('aaaa'))
 
     await refreshListComponent('');
 }

@@ -1,5 +1,5 @@
 # 🎶 BeatAPI - Gerenciamento de uma playlist de músicas 
-  **Aluna:** Bruno Viotto, Gabriela Pedroso, Michelle Bornes<br/>
+  **Alunos:** Bruno Viotto, Gabriela Pedroso, Michelle Bornes<br/>
   **Professor:** Gustavo Abreu<br/><br/>
 
 📌 **DESCRIÇÃO**<br/>

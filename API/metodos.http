@@ -1,0 +1,5 @@
+# Ler dados do DB
+GET http://localhost:5195/beatapi?autor:Linkin%20Park
+
+###
+POST http://localhost:5195/beatapi

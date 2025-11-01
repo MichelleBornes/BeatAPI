@@ -1,5 +1,21 @@
-# Ler dados do DB
-GET http://localhost:5195/beatapi?autor:Linkin%20Park
+# GET com autor
+GET http://localhost:5195/beatapi?autor=Linkin%20Park
+
+###
+
+# GET com nome
+GET http://localhost:5195/beatapi?nome=Numb
+
+###
+
+# GET com genero
+GET http://localhost:5195/beatapi?genero=Rock
+
+###
+
+# GET com album
+GET http://localhost:5195/beatapi?album=Thriller
 
 ###
 POST http://localhost:5195/beatapi
+

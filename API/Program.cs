@@ -10,9 +10,23 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 var app = builder.Build();
 
 // Método GET - Ler
-app.MapGet("/beatapi", async (AppDbContext db) =>
+app.MapGet("/beatapi", async (AppDbContext db, string? nome, string? genero, string? autor, string? album) =>
 {
-    return await db.Musicas.ToListAsync();
+    var query = db.Musicas.AsQueryable();
+
+    if (!string.IsNullOrWhiteSpace(nome))
+        query = query.Where(m => EF.Functions.Like(m.Nome, $"%{nome}%"));
+
+    if (!string.IsNullOrWhiteSpace(genero))
+        query = query.Where(m => EF.Functions.Like(m.Genero, $"%{genero}%"));
+
+    if (!string.IsNullOrWhiteSpace(autor))
+        query = query.Where(m => EF.Functions.Like(m.Autor, $"%{autor}%"));
+
+    if (!string.IsNullOrWhiteSpace(album))
+        query = query.Where(m => EF.Functions.Like(m.Album, $"%{album}%"));
+
+    return await query.ToListAsync();
 });
 
 // Método POST - adicionar nova música

@@ -17,5 +17,15 @@ GET http://localhost:5195/beatapi?genero=Rock
 GET http://localhost:5195/beatapi?album=Thriller
 
 ###
-POST http://localhost:5195/beatapi
+POST http://localhost:5195/beatapi/
+Content-Type: application/json 
+
+{
+    "nome": "Paint the Town Red",
+    "duracao": 3,
+    "genero": "Rap/Pop",
+    "autor": "Doja Cat",
+    "album": "Scarlet",
+    "capa": "https://upload.wikimedia.org/wikipedia/pt/0/0b/Doja_Cat_-_Scarlet.png"        
+}
 

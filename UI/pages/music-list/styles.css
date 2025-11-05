@@ -120,3 +120,45 @@
 .add-button > .plus:nth-child(1) {
   rotate: 90deg;
 }
+.adicionarMusica form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color:#06f;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  flex-direction: flex;
+  gap: 1rem;
+}
+
+#buttons{
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.botaoCriar{
+  width: 100px;
+  height: 40px;
+  width: 200px;
+  background-color: #06f;
+  color: white;
+  border-radius: 15px;
+  border-color: aliceblue;
+}
+
+.cancel-button{ 
+  width: 100px;
+  height: 40px;
+  width: 200px;
+  background-color: red;
+  color: white;
+  border-radius: 15px;
+  border-color: aliceblue;
+  cursor: pointer;
+}

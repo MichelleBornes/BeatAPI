@@ -1,1 +1,30 @@
-Dialog works
+<link rel="stylesheet" href="pages/music-list/styles.css">
+
+<div class="adicionarMusica">
+    <form id="music-form">
+        <h1>Adicionar Música</h1>
+
+       <div class="row">
+            <input type="text" placeholder="Titulo" id="title" name="title" required>
+            <input type="text" placeholder="Artista" id="artist" name="artist" required>
+        </div>    
+
+        <div class="row">
+            <input type="number" placeholder="Duração" id="duration" name="duration" required>
+            <input type="url" placeholder="URLda Capa" id="genre" name="genre" required>
+        </div>
+        
+        <div class="row">
+            <input type="text" placeholder="Album" id="album" name="album">
+
+            <input type="number" placeholder="Ano" id="year" name="year" min="1900" max="2100">
+        </div>
+
+        <div id="buttons">
+            <button type="submit" class = "botaoCriar">Criar</button>
+
+            <button type="button"  class="cancel-button">Cancelar</button>
+        </div>
+    </form>  
+</div>
+    

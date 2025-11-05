@@ -1,40 +1,112 @@
+using System.Text.Json;
 using BeatAPI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+});
+
 // Configurar o SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=playlist.db"));
+{
+    options.UseSqlite("Data Source=playlist.db");
+});
 
-var app = builder.Build();
+builder.Services.AddCors(options => options
+    .AddPolicy(
+        name: "UI",
+        policy => policy
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .WithOrigins("http://127.0.0.1:5500")
+    ));
+
+await using var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    await context.Database.MigrateAsync();
+}
+
+app.UseCors("UI");
+
 
 // Método GET - Ler
-app.MapGet("/beatapi", async (AppDbContext db, string? nome, string? genero, string? autor, string? album) =>
+app.MapGet("/songs", async (AppDbContext db, [FromQuery] string? text) =>
 {
     var query = db.Musicas.AsQueryable();
 
-    if (!string.IsNullOrWhiteSpace(nome))
-        query = query.Where(m => EF.Functions.Like(m.Nome, $"%{nome}%"));
+    if (!string.IsNullOrWhiteSpace(text))
+    {
+        text = text.ToLower();
 
-    if (!string.IsNullOrWhiteSpace(genero))
-        query = query.Where(m => EF.Functions.Like(m.Genero, $"%{genero}%"));
+        query = query.Where(m =>
+            m.Nome.ToLower().Contains(text)
+            || m.Genero.ToLower().Contains(text)
+            || m.Autor.ToLower().Contains(text)
+            || m.Album.ToLower().Contains(text));
+    }
 
-    if (!string.IsNullOrWhiteSpace(autor))
-        query = query.Where(m => EF.Functions.Like(m.Autor, $"%{autor}%"));
+    var songs = await query.ToListAsync();
 
-    if (!string.IsNullOrWhiteSpace(album))
-        query = query.Where(m => EF.Functions.Like(m.Album, $"%{album}%"));
-
-    return await query.ToListAsync();
+    return songs;
 });
 
+
 // Método POST - adicionar nova música
-app.MapPost("/beatapi", async (AppDbContext db, Musica novaMusica) =>
+app.MapPost("/songs", async (AppDbContext db, Musica novaMusica) =>
 {
     db.Musicas.Add(novaMusica);
     await db.SaveChangesAsync();
-    return Results.Created($"/beatapi/{novaMusica.Id}", novaMusica);
+    return Results.Created($"/songs/{novaMusica.Id}", novaMusica);
 });
 
-app.Run();
+
+//Método PUT - Alterar dados de uma música existente.
+app.MapPut("/songs/{id}", async (int id, AppDbContext db, Musica musicaAtualizada) =>
+{
+    var Musica = await db.Musicas.FindAsync(id);
+
+    if (Musica is null)
+    {
+        return Results.NotFound("Música não encontrada!");
+    }
+
+    Musica.Nome = musicaAtualizada.Nome;
+    Musica.Duracao = musicaAtualizada.Duracao;
+    Musica.Genero = musicaAtualizada.Genero;
+    Musica.Autor = musicaAtualizada.Autor;
+    Musica.Album = musicaAtualizada.Album;
+    Musica.Capa = musicaAtualizada.Capa;
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok(Musica);
+
+});
+
+
+//Método DELETE - Remover uma música existente na Playlist.
+app.MapDelete("/songs/{id}", async (int id, AppDbContext db) =>
+{
+    var Musica = await db.Musicas.FindAsync(id);
+
+    if (Musica is null)
+    {
+        return Results.NotFound("Música não encontrada!");
+    }
+
+    db.Musicas.Remove(Musica);
+    await db.SaveChangesAsync();
+
+    return Results.NoContent();
+});
+
+
+await app.RunAsync();

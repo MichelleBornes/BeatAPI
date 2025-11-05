@@ -35,12 +35,30 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCors("UI");
 
-// GET - Consultando todos os dados do banco de dados
-app.MapGet("/songs", async (AppDbContext db) =>
+// Método GET - Ler
+app.MapGet("/songs", async (AppDbContext db, string? text) =>
 {
-    var songs = await db.Musicas.ToArrayAsync();
+    var query = db.Musicas.AsQueryable();
 
-    return Results.Ok(songs);
+    if (!string.IsNullOrWhiteSpace(text))
+    {
+        query = query.Where(m => m.Nome.Contains(text))
+            .Where(m => m.Genero.Contains(text))
+            .Where(m => m.Autor.Contains(text))
+            .Where(m => m.Album.Contains(text));
+    }
+
+    var songs = await query.ToListAsync();
+
+    return songs;
+});
+
+// Método POST - adicionar nova música
+app.MapPost("/songs", async (AppDbContext db, Musica novaMusica) =>
+{
+    db.Musicas.Add(novaMusica);
+    await db.SaveChangesAsync();
+    return Results.Created($"/songs/{novaMusica.Id}", novaMusica);
 });
 
 await app.RunAsync();

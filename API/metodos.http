@@ -1,0 +1,31 @@
+# GET com autor
+GET http://localhost:5195/beatapi?autor=Linkin%20Park
+
+###
+
+# GET com nome
+GET http://localhost:5195/beatapi?nome=Numb
+
+###
+
+# GET com genero
+GET http://localhost:5195/beatapi?genero=Rock
+
+###
+
+# GET com album
+GET http://localhost:5195/beatapi?album=Thriller
+
+###
+POST http://localhost:5195/beatapi/
+Content-Type: application/json 
+
+{
+    "nome": "Paint the Town Red",
+    "duracao": 3,
+    "genero": "Rap/Pop",
+    "autor": "Doja Cat",
+    "album": "Scarlet",
+    "capa": "https://upload.wikimedia.org/wikipedia/pt/0/0b/Doja_Cat_-_Scarlet.png"        
+}
+

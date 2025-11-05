@@ -36,10 +36,10 @@ async function onAddSongButtonClick() {
 }
 
 async function onEditButtonClick(id) {
-    const song = (await getData())
+    const song = (await getData(''))
         .find(x => x.id === id);
 
-    if (song === null){
+    if (song === null || song === undefined){
         alert('Música não encontrada!');
         await refreshListComponent();
     }
@@ -125,6 +125,8 @@ async function onFormSubmitPost(event) {
         });
 
     dialogElement.close();
+
+    await refreshListComponent();
 }
 
 async function onFormSubmitPut(event, id) {

@@ -154,8 +154,7 @@ async function onFormSubmitPut(event, id) {
 
 async function refreshListComponent() {
 
-    const songs = (await getData())
-        .filter(x => x.nome.toLowerCase().includes(inputElement.value.toLowerCase()));
+    const songs = await getData(inputElement.value);
 
     const component = await fetch('pages/music-list/components/music-item.html')
         .then(response => response.text())
@@ -193,8 +192,8 @@ async function refreshListComponent() {
     }
 }
 
-async function getData() {
-    const songs = await fetch('http://localhost:5195/songs')
+async function getData(text) {
+    const songs = await fetch(`http://localhost:5195/songs?text=${text}`)
         .then(async x => await x.json());
 
     return songs;

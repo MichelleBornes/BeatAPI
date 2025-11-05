@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BeatAPI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,17 +38,19 @@ app.UseCors("UI");
 
 
 // Método GET - Ler
-app.MapGet("/songs", async (AppDbContext db, string? text) =>
+app.MapGet("/songs", async (AppDbContext db, [FromQuery] string? text) =>
 {
     var query = db.Musicas.AsQueryable();
 
     if (!string.IsNullOrWhiteSpace(text))
     {
-        query = query
-            .Where(m => m.Nome.Contains(text))
-            .Where(m => m.Genero.Contains(text))
-            .Where(m => m.Autor.Contains(text))
-            .Where(m => m.Album.Contains(text));
+        text = text.ToLower();
+
+        query = query.Where(m =>
+            m.Nome.ToLower().Contains(text)
+            || m.Genero.ToLower().Contains(text)
+            || m.Autor.ToLower().Contains(text)
+            || m.Album.ToLower().Contains(text));
     }
 
     var songs = await query.ToListAsync();
